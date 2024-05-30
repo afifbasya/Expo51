@@ -1,37 +1,42 @@
-import { useState } from "react";
-import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
-import Card from '../components/Card'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 
 export default function Index() {
-  //State dan Props = Variabel
-  //State = variabel yg bisa berubah
-  //Props = tidak bisa berubah, dan berasal dari state
 
-  const [hargaBakso, setHargaBakso] = useState(7000);
-  const [jumlah, setJumlah] = useState(0);
+  //Flashback State
+  //1. Bisa berupa angka
+  //2. Bisa berupa benar dan salah *coming soon
+  //3. Bisa berupa string ("")
+  //4. Bisa berupa object *coming soon
+  //5. Bisa berupa array *coming soon
+
+  //Lifecycle React (useEffect)
+  const [makanan, setMakanan] = useState("Bakso");
+
+  //1. Ketika Component Pertamakali dimunculkan
+  useEffect(() => {
+    //Program yg ada disini dijalankan ketika pertama muncul
+    console.log("Halooo Saya Lifecycle Pertama");
+  }, [])
+
+  //2. Ketika Ada State yang berubah
+  useEffect(() => {
+    //Program yg ada disini dijalankan ketika pertama muncul & ketika ada state yang berubah
+    console.log("Halo dijalankan ketika state makanan berubah");
+  }, [makanan])
+
+
+
+  //3. Ketika Ada Component yang dicabut
 
   return (
-    <View
-      style={styles.container}
-    >
-
-      <Card jumlah={jumlah} hargaBakso={hargaBakso} />
-
-      <TouchableOpacity style={styles.button} onPress={() => setJumlah(jumlah + 1)} >
-        <Text>Tambah Bakso</Text>
+    <View style={{ margin: 30 }}>
+      <Text>{makanan}</Text>
+      <TouchableOpacity onPress={() => setMakanan("Mie Ayam")}>
+        <Text>Ubah Makanan</Text>
       </TouchableOpacity>
-
-      <TouchableOpacity style={styles.button} onPress={() => setJumlah(0)} >
-        <Text>Reset</Text>
-      </TouchableOpacity>
-
     </View>
-  );
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  button: { marginHorizontal: 30, backgroundColor: 'white', padding: 10, borderWidth: 1, borderRadius: 5, marginTop: 10 }
-})
+const styles = StyleSheet.create({})
