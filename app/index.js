@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import Footer from '../components/Footer'
 
 export default function Index() {
 
@@ -12,6 +13,7 @@ export default function Index() {
 
   //Lifecycle React (useEffect)
   const [makanan, setMakanan] = useState("Bakso");
+  const [show, setShow] = useState(true);
 
   //1. Ketika Component Pertamakali dimunculkan
   useEffect(() => {
@@ -25,15 +27,17 @@ export default function Index() {
     console.log("Halo dijalankan ketika state makanan berubah");
   }, [makanan])
 
-
-
-  //3. Ketika Ada Component yang dicabut
-
   return (
     <View style={{ margin: 30 }}>
       <Text>{makanan}</Text>
-      <TouchableOpacity onPress={() => setMakanan("Mie Ayam")}>
+      <TouchableOpacity onPress={() => setMakanan("Mie Ayam")} style={{ marginBottom: 50 }}>
         <Text>Ubah Makanan</Text>
+      </TouchableOpacity>
+
+      {/* if else  */}
+      {show ? <Footer /> : null}
+      <TouchableOpacity onPress={() => setShow(!show)}>
+        <Text>{show ? "Hapus Footer" : "Tampilkan Footer"}</Text>
       </TouchableOpacity>
     </View>
   )
