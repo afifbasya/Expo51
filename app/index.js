@@ -1,46 +1,55 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import Footer from '../components/Footer'
+import { StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
 
-export default function Index() {
-
-  //Flashback State
-  //1. Bisa berupa angka
-  //2. Bisa berupa benar dan salah *coming soon
-  //3. Bisa berupa string ("")
-  //4. Bisa berupa object *coming soon
-  //5. Bisa berupa array *coming soon
-
-  //Lifecycle React (useEffect)
-  const [makanan, setMakanan] = useState("Bakso");
-  const [show, setShow] = useState(true);
-
-  //1. Ketika Component Pertamakali dimunculkan
-  useEffect(() => {
-    //Program yg ada disini dijalankan ketika pertama muncul
-    console.log("Halooo Saya Lifecycle Pertama");
-  }, [])
-
-  //2. Ketika Ada State yang berubah
-  useEffect(() => {
-    //Program yg ada disini dijalankan ketika pertama muncul & ketika ada state yang berubah
-    console.log("Halo dijalankan ketika state makanan berubah");
-  }, [makanan])
+//Looping
+export default function index() {
+  const [makanans, setMakanan] = useState([
+    {
+      id: 1,
+      nama: "Bakso",
+      harga: 10000
+    },
+    {
+      id: 2,
+      nama: "Mie Ayam",
+      harga: 7000
+    },
+    {
+      id: 3,
+      nama: "Siomay",
+      harga: 5000
+    },
+    {
+      id: 4,
+      nama: "Soto",
+      harga: 12000
+    },
+    {
+      id: 5,
+      nama: "Nasi Goreng",
+      harga: 15000
+    },
+  ])
 
   return (
     <View style={{ margin: 30 }}>
-      <Text>{makanan}</Text>
-      <TouchableOpacity onPress={() => setMakanan("Mie Ayam")} style={{ marginBottom: 50 }}>
-        <Text>Ubah Makanan</Text>
-      </TouchableOpacity>
+      {makanans.map((makanan, index) => {
+        return (
+          <View key={index} style={styles.card}>
+            <Text>{makanan.nama}</Text>
+            <Text>Rp. {makanan.harga}</Text>
+          </View>
+        )
+      })}
 
-      {/* if else  */}
-      {show ? <Footer /> : null}
-      <TouchableOpacity onPress={() => setShow(!show)}>
-        <Text>{show ? "Hapus Footer" : "Tampilkan Footer"}</Text>
-      </TouchableOpacity>
     </View>
   )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  card: {
+    marginVertical: 10,
+    backgroundColor: 'white',
+    padding: 10
+  }
+})
