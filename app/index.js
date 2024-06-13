@@ -1,83 +1,54 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 
-//Looping
 export default function index() {
-  const [makanans, setMakanan] = useState([
-    {
-      id: 1,
-      nama: "Bakso",
-      harga: 10000
-    },
-    {
-      id: 2,
-      nama: "Bakso",
-      harga: 7000
-    },
-    {
-      id: 3,
-      nama: "Siomay",
-      harga: 5000
-    },
-    {
-      id: 4,
-      nama: "Soto",
-      harga: 12000
-    },
-    {
-      id: 5,
-      nama: "Nasi Goreng",
-      harga: 15000
-    },
-  ])
+  const [posts, setPost] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-  // Index Of 
-  // const [angkas, setAngka] = useState([
-  //   1, 2, 3, 4, 5
-  // ])
-  // console.log("Index Of : ", angkas.indexOf(5));
+  const isEmptyObject = (obj) => {
+    return Object.keys(obj).length === 0 && obj.constructor === Object;
+  };
 
+  const ambilAPI = async () => {
+    setLoading(true)
+    await fetch('https://jsonplaceholder.typicode.com/posts')
+      .then(response => response.json())
+      .then(json => {
+        setLoading(false)
+
+        if (isEmptyObject(json)) {
+          setError("Maaf Ada Kendala")
+        } else {
+          setError(false)
+          setPost(json)
+        }
+
+      })
+  }
+
+  useEffect(() => {
+    ambilAPI()
+  }, [])
 
   return (
-    <View style={{ margin: 30 }}>
-      {/* 1. Mapping */}
-      {makanans.map((makanan, index) => {
+    <View style={{ margin: 10 }}>
+      {error && (
+        <Text>{error}</Text>
+      )}
+      {loading && (
+        <ActivityIndicator size="large" color="black" />
+      )}
+      {posts?.map((post) => {
         return (
-          <View key={index} style={styles.card}>
-            <Text>{makanan.nama}</Text>
-            <Text>Rp. {makanan.harga}</Text>
+          <View key={post.id} style={{ padding: 10, backgroundColor: 'white', marginBottom: 10 }}>
+            <Text style={{ fontWeight: 'bold', marginBottom: 10 }}>{post.title}</Text>
+            <Text>{post.body}</Text>
           </View>
         )
       })}
-
-      {/* 2. Find  */}
-      {/* <Text>{makanans.find((findMakanan) => findMakanan.nama === "Bakso")?.nama}</Text> */}
-
-
-      {/* 3. Filter */}
-      {/* {makanans.filter((findMakanan) => findMakanan.nama === "Bakso").map((makanan, index) => {
-        return (
-          <View key={index} style={styles.card}>
-            <Text>{makanan.nama}</Text>
-            <Text>Rp. {makanan.harga}</Text>
-          </View>
-        )
-      })} */}
-
-      {/* 5. Reduce  */}
-      <Text>Total : {makanans.reduce((total, totalSekarang) => {
-        return total + totalSekarang.harga
-      }, 0)}</Text>
-
-
     </View>
   )
 }
 
-const styles = StyleSheet.create({
-  card: {
-    marginVertical: 10,
-    backgroundColor: 'white',
-    padding: 10
-  }
-})
+const styles = StyleSheet.create({})
