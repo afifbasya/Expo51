@@ -39,7 +39,11 @@ export default function index() {
   return (
     <View style={styles.container}>
       <Text>Email :</Text>
-      <TextInput style={styles.input} onChangeText={setEmail} value={email} />
+      <TextInput
+        style={styles.input}
+        onChangeText={setEmail}
+        value={email}
+      />
 
       <Text style={{ marginTop: 20 }}>Password :</Text>
       <TextInput
