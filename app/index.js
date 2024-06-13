@@ -1,54 +1,38 @@
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React from 'react'
 
 export default function index() {
-  const [posts, setPost] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-
-  const isEmptyObject = (obj) => {
-    return Object.keys(obj).length === 0 && obj.constructor === Object;
-  };
-
-  const ambilAPI = async () => {
-    setLoading(true)
-    await fetch('https://jsonplaceholder.typicode.com/posts')
-      .then(response => response.json())
-      .then(json => {
-        setLoading(false)
-
-        if (isEmptyObject(json)) {
-          setError("Maaf Ada Kendala")
-        } else {
-          setError(false)
-          setPost(json)
-        }
-
-      })
-  }
-
-  useEffect(() => {
-    ambilAPI()
-  }, [])
-
   return (
-    <View style={{ margin: 10 }}>
-      {error && (
-        <Text>{error}</Text>
-      )}
-      {loading && (
-        <ActivityIndicator size="large" color="black" />
-      )}
-      {posts?.map((post) => {
-        return (
-          <View key={post.id} style={{ padding: 10, backgroundColor: 'white', marginBottom: 10 }}>
-            <Text style={{ fontWeight: 'bold', marginBottom: 10 }}>{post.title}</Text>
-            <Text>{post.body}</Text>
-          </View>
-        )
-      })}
+    <View style={styles.container}>
+      <Text>Email :</Text>
+      <TextInput style={styles.input} />
+
+      <Text style={{ marginTop: 20 }}>Password :</Text>
+      <TextInput style={styles.input} />
+
+      <TouchableOpacity style={styles.button}>
+        <Text style={{ color: 'white' }}>Submit</Text>
+      </TouchableOpacity>
     </View>
   )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    padding: 20
+  },
+  input: {
+    backgroundColor: 'white',
+    marginTop: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderWidth: 1,
+    borderRadius: 5
+  },
+  button: {
+    marginTop: 20,
+    backgroundColor: 'black',
+    padding: 10,
+    alignItems: 'center'
+  }
+})
