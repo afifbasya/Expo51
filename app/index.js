@@ -1,85 +1,103 @@
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Dropdown } from 'react-native-element-dropdown';
+
+const pendidikanTerakhir = [
+  {
+    label: "SD",
+    value: "SD"
+  },
+  {
+    label: "SMP",
+    value: "SMP"
+  },
+  {
+    label: "SMA",
+    value: "SMA"
+  },
+  {
+    label: "D3",
+    value: "D3"
+  },
+  {
+    label: "S1",
+    value: "S1"
+  },
+  {
+    label: "S2",
+    value: "S2"
+  },
+]
 
 export default function index() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [show, setShow] = useState(true);
+  const [pendTerpilih, setPendTerpilih] = useState(false);
+  const [guruTerpilih, setGuruTerpilih] = useState(false);
+  const [datGuru, setDataGuru] = useState([]);
 
-  const handleSubmit = () => {
-    //pengkondisian (if / else)
-    if (email === "") {
-      return Alert.alert('Error', 'Maaf Email Harus Diisi');
-    }
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-    if (password === "") {
-      return Alert.alert('Error', 'Maaf Password Harus Diisi');
-    }
+  const isEmptyObject = (obj) => {
+    return Object.keys(obj).length === 0 && obj.constructor === Object;
+  };
 
-    postAPI();
-  }
-
-  const postAPI = async () => {
-    await fetch('https://jsonplaceholder.typicode.com/posts', {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        password
-      })
-    })
+  const ambilAPI = async () => {
+    setLoading(true)
+    await fetch('https://jsonplaceholder.typicode.com/users')
       .then(response => response.json())
       .then(json => {
-        console.log("Json : ", json);
+        console.log("json : ", json);
+        setLoading(false)
+
+        if (isEmptyObject(json)) {
+          setError("Maaf Ada Kendala")
+        } else {
+          setError(false)
+          setDataGuru(json)
+        }
+
       })
   }
 
+  useEffect(() => {
+    ambilAPI()
+  }, [])
+
+  console.log("guruTerpilih : ", guruTerpilih);
+
   return (
-    <View style={styles.container}>
-      <Text>Email :</Text>
-      <TextInput
-        style={styles.input}
-        onChangeText={setEmail}
-        value={email}
+    <View style={{ padding: 20 }}>
+      <Text>Pendidikan Terakhir</Text>
+      <Dropdown
+        data={pendidikanTerakhir}
+        placeholder='Pilih Pendidikan'
+        labelField="label"
+        onChange={item => {
+          setPendTerpilih(item.label)
+        }}
+        style={styles.select}
       />
 
-      <Text style={{ marginTop: 20 }}>Password :</Text>
-      <TextInput
-        style={styles.input}
-        onChangeText={setPassword}
-        value={password}
-        secureTextEntry={show}
+      <Text style={{ marginTop: 10 }}>Guru</Text>
+      <Dropdown
+        data={datGuru}
+        placeholder='Pilih Guru'
+        labelField="name"
+        onChange={item => {
+          setGuruTerpilih(item.name)
+        }}
+        style={styles.select}
       />
-
-      <TouchableOpacity onPress={() => setShow(!show)}>
-        <Text>{show ? "Tampil" : "Sembunyikan"}</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.button} onPress={() => handleSubmit()}>
-        <Text style={{ color: 'white' }}>Submit</Text>
-      </TouchableOpacity>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20
-  },
-  input: {
+  select: {
+    borderWidth: 1,
+    paddingHorizontal: 10,
     backgroundColor: 'white',
     marginTop: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderWidth: 1,
     borderRadius: 5
-  },
-  button: {
-    marginTop: 20,
-    backgroundColor: 'black',
-    padding: 10,
-    alignItems: 'center'
   }
 })
